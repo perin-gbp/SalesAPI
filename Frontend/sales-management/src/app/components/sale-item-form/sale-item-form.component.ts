@@ -11,9 +11,9 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule]
 })
 export class SaleItemFormComponent implements OnInit {
-  @Input() saleItemForm!: FormGroup; // ✅ Cada item recebe um FormGroup individual
+  @Input() saleItemForm!: FormGroup;
   @Output() remove = new EventEmitter<void>();
-  @Input() products: Product[] = []; // ✅ Recebendo os produtos corretamente
+  @Input() products: Product[] = [];
 
   constructor(private productService: ProductService, private cdr: ChangeDetectorRef) {}
 
@@ -45,14 +45,14 @@ export class SaleItemFormComponent implements OnInit {
       if (selectedProduct) {
         this.saleItemForm.patchValue({
           productId: selectedProduct.id,
-          quantity: quantity || 1 // ✅ Se a quantidade for undefined, define como 1
+          quantity: quantity || 1
         });
       } else {
         console.warn("⚠️ Nenhum productId encontrado, mantendo valor original.");
       }
     }
   
-    this.cdr.detectChanges(); // 🔹 Garante que a UI seja atualizada
+    this.cdr.detectChanges();
   }
   
 
@@ -73,7 +73,8 @@ export class SaleItemFormComponent implements OnInit {
     if (selectedProduct) {
       this.saleItemForm.patchValue({ 
         unitPrice: selectedProduct.price, 
-        productName: selectedProduct.name 
+        productName: selectedProduct.name,
+        quantity: selectedProduct.quantity
       });
   
       this.cdr.detectChanges(); // 🔹 Garante que o Angular detecte a mudança
@@ -112,7 +113,8 @@ export class SaleItemFormComponent implements OnInit {
     if (selectedProduct && this.saleItemForm) {
       this.saleItemForm.patchValue({
         productId: selectedProduct.id,
-        productName: selectedProduct.name, // ✅ Agora garantimos que productName é atualizado corretamente
+        productName: selectedProduct.name,
+        quantity: selectedProduct.quantity,
         unitPrice: selectedProduct.price
       });
   
