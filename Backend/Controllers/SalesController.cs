@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using SalesApi.Models;
 using SalesApi.Services;
 using SalesApi.Services.Interfaces;
+using SalesApi.DTOs;
 
 namespace SalesApi.Controllers
 {
@@ -60,14 +61,22 @@ namespace SalesApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] Sale sale)
         {
-            if (sale == null || sale.Id != id)
-                return BadRequest("Invalid sale data.");
+            if (sale == null || sale.Id == 0)
+                return BadRequest("Invalid sale data. Sale ID is required.");
+
+            if (sale.Id != id)
+                return BadRequest("Sale ID in URL does not match Sale ID in request body.");
+
+
+            if (sale.Id == 0)
+                sale.Id = id;
 
             var updatedSale = await _saleService.UpdateSaleAsync(sale);
+
             if (updatedSale == null)
                 return NotFound();
 
-            return NoContent();
+            return Ok(updatedSale);
         }
 
         /// <summary>
@@ -83,6 +92,10 @@ namespace SalesApi.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Checa a existencia de um número de venda
+        /// </summary>
+        /// <param name="saleNumber"></param>
         [HttpGet("check-sale-number/{saleNumber}")]
         public async Task<IActionResult> CheckSaleNumberExists(string saleNumber)
         {

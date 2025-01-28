@@ -4,6 +4,7 @@ using SalesApi.Repositories.Interfaces;
 using SalesApi.Services.Interfaces;
 using SalesApi.Models;
 using SalesApi.Repositories;
+using SalesApi.DTOs;
 
 namespace SalesApi.Services.Services
 {
@@ -38,12 +39,30 @@ namespace SalesApi.Services.Services
 
         public async Task<Sale> UpdateSaleAsync(Sale sale)
         {
-            if (sale == null || sale.Items == null || !sale.Items.Any())
-                throw new ArgumentException("A sale must have at least one item.");
+            var currentSale = await _saleRepository.GetByIdAsync(sale.Id);
 
-            ApplyBusinessRules(sale);
 
-            return await _saleRepository.UpdateAsync(sale);
+
+            if (currentSale == null)
+                return null;
+
+            currentSale.SaleNumber = sale.SaleNumber;
+            currentSale.SaleDate = sale.SaleDate;
+            currentSale.Customer = sale.Customer;
+            currentSale.Branch = sale.Branch;
+
+            currentSale.Items = sale.Items.Select(item => new SaleItem
+            {
+                ProductId = item.ProductId,
+                ProductName = item.ProductName,
+                Quantity = item.Quantity,
+                UnitPrice = item.UnitPrice,
+                TotalPrice = item.TotalPrice,
+            }).ToList();
+
+            currentSale = ApplyBusinessRules(currentSale);
+
+            return await _saleRepository.UpdateAsync(currentSale);
         }
 
         public async Task<bool> DeleteSaleAsync(int id)
@@ -56,7 +75,7 @@ namespace SalesApi.Services.Services
             return await _saleRepository.SaleNumberExists(saleNumber);
         }
 
-        private void ApplyBusinessRules(Sale sale)
+        private Sale ApplyBusinessRules(Sale sale)
         {
             decimal totalSaleAmount = 0;
 
@@ -77,6 +96,8 @@ namespace SalesApi.Services.Services
             }
 
             sale.TotalAmount = totalSaleAmount;
+
+            return sale;
         }
     }
 }

@@ -8,7 +8,6 @@ namespace SalesApi.Mappings
     {
         public MappingProfile()
         {
-            // Mapeamentos entre Entidades e DTOs
             CreateMap<Sale, SaleResponseDTO>();
             CreateMap<SaleItem, SaleItemResponseDTO>();
             CreateMap<SaleDTO, Sale>();

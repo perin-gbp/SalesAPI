@@ -18,7 +18,7 @@ namespace SalesApi.Repositories.Repositories
 
         public async Task<IEnumerable<Sale>> GetAllAsync()
         {
-            return await _context.Sales.Include(s => s.Items).ToListAsync();
+            return await _context.Sales.OrderBy(x => x.Id).Include(s => s.Items).ToListAsync();
         }
 
         public async Task<Sale> GetByIdAsync(int id)
@@ -33,11 +33,38 @@ namespace SalesApi.Repositories.Repositories
             return sale;
         }
 
-        public async Task<Sale> UpdateAsync(Sale sale)
+        public async Task<Sale?> UpdateAsync(Sale sale)
         {
-            _context.Sales.Update(sale);
+            var existingSale = await _context.Sales
+                .Include(s => s.Items)
+                .FirstOrDefaultAsync(s => s.Id == sale.Id);
+
+            if (existingSale == null)
+                return null;
+
+
+            var itemsToRemove = existingSale.Items
+                .Where(item => item.Id != 0)
+                .ToList();
+
+            _context.SaleItems.RemoveRange(itemsToRemove);
+
+
+            existingSale.SaleNumber = sale.SaleNumber;
+            existingSale.SaleDate = sale.SaleDate;
+            existingSale.Customer = sale.Customer;
+            existingSale.Branch = sale.Branch;
+            existingSale.Items = sale.Items.Select(item => new SaleItem
+            {
+                ProductId = item.ProductId,
+                ProductName = item.ProductName,
+                Quantity = item.Quantity,
+                UnitPrice = item.UnitPrice,
+                TotalPrice = item.TotalPrice
+            }).ToList();
+
             await _context.SaveChangesAsync();
-            return sale;
+            return existingSale;
         }
 
         public async Task<bool> DeleteAsync(int id)
