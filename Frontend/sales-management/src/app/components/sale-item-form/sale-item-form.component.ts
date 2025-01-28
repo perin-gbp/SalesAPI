@@ -22,7 +22,25 @@ export class SaleItemFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  
+
+    setTimeout(() => {
+        const quantityControl = this.saleItemForm.get('quantity');
+
+        if (quantityControl) {
+            quantityControl.setValue(quantityControl.value);
+        }
+
+        this.cdr.detectChanges();
+    }, 100);
+    setTimeout(() => {
+        const quantityControl = this.saleItemForm.get('quantity');
+        
+        if (quantityControl) {
+          quantityControl.setValue(quantityControl.value);
+        }
+        this.cdr.detectChanges();
+      }, 100);
+
     if (!this.products || this.products.length === 0) {
       this.productService.getAll().subscribe((data) => {
         this.products = data;
