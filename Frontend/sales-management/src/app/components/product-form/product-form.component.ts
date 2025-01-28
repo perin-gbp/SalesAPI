@@ -51,7 +51,6 @@ export class ProductFormComponent implements OnInit {
   onSubmit(id: number): void {
     if (this.productForm.valid) {
       const productData = this.productForm.value;
-      productData.id = id;
       if (this.isEditMode && this.productId) {
         console.log(productData)
         this.productService.update(productData).subscribe(() => {

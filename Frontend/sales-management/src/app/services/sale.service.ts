@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
 import { Sale } from '../models/sale';
 
 @Injectable({ providedIn: 'root' })
@@ -21,8 +21,8 @@ export class SaleService {
     return this.http.post<Sale>(this.baseUrl, sale);
   }
 
-  update(sale: Sale): Observable<Sale> {
-    return this.http.put<Sale>(`${this.baseUrl}/${sale.id}`, sale);
+  update(sale: Sale, id: number): Observable<Sale> {
+    return this.http.put<Sale>(`${this.baseUrl}/${id}`, sale);
   }
 
   delete(id: number): Observable<void> {
@@ -30,6 +30,8 @@ export class SaleService {
   }
 
   checkSaleNumberExists(saleNumber: string): Observable<boolean> {
-    return this.http.get<boolean>(`https://localhost:7119/api/sales/check-sale-number/${saleNumber}`);
+    return this.http.get<boolean>(`https://localhost:7119/api/sales/check-sale-number/${saleNumber}`).pipe(
+      catchError((): Observable<boolean> => of(false))
+    );
   }
 }

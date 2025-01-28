@@ -21,7 +21,7 @@
       <h3>Items</h3>
       <div formArrayName="items">
         <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
-          <app-sale-item-form [saleItemForm]="item" [products]="products" (remove)="removeItem(i)"></app-sale-item-form>
+          <app-sale-item-form [saleItemForm]="items.at(i)" [products]="products" (remove)="removeItem(i)"></app-sale-item-form>
         </div>
       </div>
 

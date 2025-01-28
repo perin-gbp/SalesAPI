@@ -1,25 +1,25 @@
 <div class="row">
     <!-- Dropdown de Produtos -->
     <div class="col">
-      <label>Product</label>
-      <select class="form-select" formControlName="productId">
-        <option label="Select" disabled selected></option>
-        <option *ngFor="let product of products" [value]="product.id">
-          {{ product.name }}
-        </option>
-      </select>
-    </div>
-  
-    <!-- Quantidade -->
-    <div class="col">
-      <label>Quantity</label>
-      <input type="number" class="form-control" formControlName="quantity" min="1" max="20" />
-    </div>
+        <label>Product</label>
+        <select class="form-select" formControlName="productId" (change)="onProductChange($event)">
+          <option disabled selected>Select</option>
+          <option *ngFor="let product of products" [value]="product.id" [selected]="product.id === saleItemForm.get('productId')?.value">
+            {{ product.name }}
+          </option>
+        </select>
+      </div>
+      
+      <div class="col">
+        <label>Quantity</label>
+        <input type="number" class="form-control" formControlName="quantity" min="1" max="20"
+          (change)="onQuantityChange($event)">
+      </div>
   
     <!-- Preço Unitário -->
     <div class="col">
       <label>Unit Price</label>
-      <input type="number" class="form-control" formControlName="unitPrice" min="0.01" readonly />
+      <input type="number" class="form-control" formControlName="unitPrice" min="0.01" [value]="unitPriceValue" readonly />
     </div>
   
     <!-- Botão de Remover -->
@@ -27,3 +27,4 @@
       <button type="button" class="btn btn-danger" (click)="onRemove()">Remove</button>
     </div>
   </div>
+  
