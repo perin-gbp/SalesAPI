@@ -83,12 +83,6 @@ namespace SalesApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Discount")
-                        .HasColumnType("numeric");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("ProductName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -96,7 +90,7 @@ namespace SalesApi.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("SaleId")
+                    b.Property<int>("SaleId")
                         .HasColumnType("integer");
 
                     b.Property<decimal>("TotalPrice")
@@ -109,14 +103,16 @@ namespace SalesApi.Migrations
 
                     b.HasIndex("SaleId");
 
-                    b.ToTable("SaleItem");
+                    b.ToTable("SaleItems");
                 });
 
             modelBuilder.Entity("SalesApi.Models.SaleItem", b =>
                 {
                     b.HasOne("Sale", null)
                         .WithMany("Items")
-                        .HasForeignKey("SaleId");
+                        .HasForeignKey("SaleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Sale", b =>

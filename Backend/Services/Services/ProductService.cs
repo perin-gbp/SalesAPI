@@ -1,11 +1,11 @@
-﻿namespace SalesApi.Services.Services
-{
-    using SalesApi.Models;
-    using SalesApi.Repositories.Interfaces;
-    using SalesApi.Services.Interfaces;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using SalesApi.Models;
+using SalesApi.Repositories.Interfaces;
+using SalesApi.Services.Interfaces;
 
+namespace SalesApi.Services.Services
+{
     public class ProductService : IProductService
     {
         private readonly IProductRepository _productRepository;
@@ -25,19 +25,19 @@
             return await _productRepository.GetByIdAsync(id);
         }
 
-        public async Task CreateProductAsync(Product product)
+        public async Task<Product> CreateProductAsync(Product product)
         {
-            await _productRepository.AddAsync(product);
+            return await _productRepository.CreateAsync(product);
         }
 
-        public async Task UpdateProductAsync(Product product)
+        public async Task<Product> UpdateProductAsync(Product product)
         {
-            await _productRepository.UpdateAsync(product);
+            return await _productRepository.UpdateAsync(product);
         }
 
-        public async Task DeleteProductAsync(int id)
+        public async Task<bool> DeleteProductAsync(int id)
         {
-            await _productRepository.DeleteAsync(id);
+            return await _productRepository.DeleteAsync(id);
         }
     }
 }

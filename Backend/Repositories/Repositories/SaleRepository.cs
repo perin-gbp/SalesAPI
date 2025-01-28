@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SalesApi.Repositories.Interfaces;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using SalesApi.Repositories.Interfaces;
+using SalesApi.Data;
+using SalesApi.Models;
 
 namespace SalesApi.Repositories.Repositories
 {
@@ -24,26 +26,34 @@ namespace SalesApi.Repositories.Repositories
             return await _context.Sales.Include(s => s.Items).FirstOrDefaultAsync(s => s.Id == id);
         }
 
-        public async Task AddAsync(Sale sale)
+        public async Task<Sale> CreateAsync(Sale sale)
         {
-            await _context.Sales.AddAsync(sale);
+            _context.Sales.Add(sale);
             await _context.SaveChangesAsync();
+            return sale;
         }
 
-        public async Task UpdateAsync(Sale sale)
+        public async Task<Sale> UpdateAsync(Sale sale)
         {
             _context.Sales.Update(sale);
             await _context.SaveChangesAsync();
+            return sale;
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             var sale = await _context.Sales.FindAsync(id);
-            if (sale != null)
-            {
-                _context.Sales.Remove(sale);
-                await _context.SaveChangesAsync();
-            }
+            if (sale == null)
+                return false;
+
+            _context.Sales.Remove(sale);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> SaleNumberExists(string saleNumber)
+        {
+            return await _context.Sales.AnyAsync(s => s.Id.ToString() == saleNumber);
         }
     }
 }

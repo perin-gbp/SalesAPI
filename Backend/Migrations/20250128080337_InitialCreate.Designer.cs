@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace SalesApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250128011203_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20250128080337_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -86,12 +86,6 @@ namespace SalesApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Discount")
-                        .HasColumnType("numeric");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("ProductName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -99,7 +93,7 @@ namespace SalesApi.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("SaleId")
+                    b.Property<int>("SaleId")
                         .HasColumnType("integer");
 
                     b.Property<decimal>("TotalPrice")
@@ -112,14 +106,16 @@ namespace SalesApi.Migrations
 
                     b.HasIndex("SaleId");
 
-                    b.ToTable("SaleItem");
+                    b.ToTable("SaleItems");
                 });
 
             modelBuilder.Entity("SalesApi.Models.SaleItem", b =>
                 {
                     b.HasOne("Sale", null)
                         .WithMany("Items")
-                        .HasForeignKey("SaleId");
+                        .HasForeignKey("SaleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Sale", b =>
