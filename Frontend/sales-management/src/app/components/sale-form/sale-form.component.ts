@@ -42,7 +42,6 @@ export class SaleFormComponent {
     this.productService.getAll().subscribe({
       next: (products) => {
         this.products = products;
-        console.log("✅ Produtos carregados:", this.products);
       }
     });
 
@@ -58,7 +57,6 @@ export class SaleFormComponent {
   loadSale(id: number): void {
     this.saleService.getById(id).subscribe({
       next: (sale) => {
-        console.log("📌 Venda carregada:", sale);
   
         this.saleForm.patchValue({
           saleNumber: sale.saleNumber,
@@ -75,13 +73,13 @@ export class SaleFormComponent {
         this.productService.getAll().subscribe({
           next: (products) => {
             this.products = products;
-            console.log("✅ Produtos carregados:", this.products);
+            
   
             sale.items.forEach((item) => {
-              console.log("🔍 Item carregado:", item);
+              
   
               const selectedProduct = this.products.find(p => p.id === item.productId);
-              console.log("🔍 Produto correspondente ao nome encontrado:", selectedProduct);
+              
   
               const newItem = this.fb.group({
                 productId: [selectedProduct ? selectedProduct.id : item.productId, Validators.required],
@@ -96,8 +94,6 @@ export class SaleFormComponent {
             setTimeout(() => {
               this.cdr.detectChanges();
             }, 50);
-  
-            console.log("✅ Itens da venda configurados corretamente:", this.items.value);
           },
           error: (err) => {
             console.error("❌ Erro ao carregar produtos:", err);
@@ -139,12 +135,10 @@ export class SaleFormComponent {
         }))
       };
   
-      console.log("📌 JSON antes do envio:", JSON.stringify(saleData, null, 2));
   
       if (this.isEditMode && this.saleId) {
         this.saleService.update(saleData, this.saleId).subscribe({
           next: () => {
-            console.log("✅ Venda atualizada com sucesso!");
             this.router.navigate(['/sales']);
           },
           error: (err) => {
@@ -154,7 +148,6 @@ export class SaleFormComponent {
       } else {
         this.saleService.create(saleData).subscribe({
           next: () => {
-            console.log("✅ Venda criada com sucesso!");
             this.router.navigate(['/sales']);
           },
           error: (err) => {
