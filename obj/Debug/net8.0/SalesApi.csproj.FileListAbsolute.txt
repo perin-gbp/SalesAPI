@@ -139,3 +139,10 @@ C:\Users\Usuário\source\repos\SalesApi\obj\Debug\net8.0\SalesApi.pdb
 C:\Users\Usuário\source\repos\SalesApi\obj\Debug\net8.0\SalesApi.genruntimeconfig.cache
 C:\Users\Usuário\source\repos\SalesApi\obj\Debug\net8.0\ref\SalesApi.dll
 C:\Users\Usuário\source\repos\SalesApi\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\Users\Usuário\source\repos\SalesApi\bin\Debug\net8.0\sales-management\angular.json
+C:\Users\Usuário\source\repos\SalesApi\bin\Debug\net8.0\sales-management\tsconfig.app.json
+C:\Users\Usuário\source\repos\SalesApi\bin\Debug\net8.0\sales-management\tsconfig.json
+C:\Users\Usuário\source\repos\SalesApi\bin\Debug\net8.0\sales-management\tsconfig.spec.json
+C:\Users\Usuário\source\repos\SalesApi\bin\Debug\net8.0\sales-management\package-lock.json
+C:\Users\Usuário\source\repos\SalesApi\bin\Debug\net8.0\sales-management\package.json
+C:\Users\Usuário\source\repos\SalesApi\obj\Debug\net8.0\SalesApi.sourcelink.json
