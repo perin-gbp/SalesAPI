@@ -28,4 +28,8 @@ export class SaleService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
+
+  checkSaleNumberExists(saleNumber: string): Observable<boolean> {
+    return this.http.get<boolean>(`https://localhost:7119/api/sales/check-sale-number/${saleNumber}`);
+  }
 }

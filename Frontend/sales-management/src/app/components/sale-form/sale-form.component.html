@@ -1,0 +1,34 @@
+<div class="container mt-5">
+    <h2>{{ isEditMode ? 'Edit Sale' : 'Create Sale' }}</h2>
+    <form [formGroup]="saleForm" (ngSubmit)="onSubmit(this.saleId ?? 0)">
+      <div class="mb-3">
+        <label for="saleNumber" class="form-label">Sale Number</label>
+        <input id="saleNumber" type="text" class="form-control" formControlName="saleNumber" />
+      </div>
+      <div class="mb-3">
+        <label for="saleDate" class="form-label">Sale Date</label>
+        <input id="saleDate" type="date" class="form-control" formControlName="saleDate" />
+      </div>
+      <div class="mb-3">
+        <label for="branch" class="form-label">Branch</label>
+        <input id="branch" type="text" class="form-control" formControlName="branch" />
+      </div>
+      <div class="mb-3">
+        <label for="customer" class="form-label">Customer</label>
+        <input id="customer" type="text" class="form-control" formControlName="customer" />
+      </div>
+  
+      <h3>Items</h3>
+      <div formArrayName="items">
+        <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+          <app-sale-item-form [saleItemForm]="item" [products]="products" (remove)="removeItem(i)"></app-sale-item-form>
+        </div>
+      </div>
+
+        <button type="button" class="btn btn-secondary mt-2" (click)="addItem()">Add Item</button>
+        <button type="submit" class="btn btn-primary mt-2" [disabled]="saleForm.invalid">
+        {{ isEditMode ? 'Update' : 'Create' }}
+        </button>
+    </form>
+  </div>
+  

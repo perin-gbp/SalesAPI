@@ -1,38 +1,51 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../services/product.service';
-import { Product } from '../../models/product';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './product-list.component.html',
-  styleUrls: ['./product-list.component.scss'],
-  imports:[
-    CommonModule
-  ]
 })
 export class ProductListComponent implements OnInit {
-  products: Product[] = [];
+  products: any[] = [];
+  searchText: string = '';
 
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadProducts();
   }
 
   loadProducts(): void {
-    this.productService.getAll().subscribe(
-      (data) => (this.products = data),
-      (error) => console.error('Failed to load products', error)
+    this.productService.getAll().subscribe({
+      next: (data) => (this.products = data),
+      error: (err) => console.error('Failed to load products', err),
+    });
+  }
+
+  filteredProducts() {
+    return this.products.filter(product =>
+      product.name.toLowerCase().includes(this.searchText.toLowerCase())
     );
   }
 
-  deleteProduct(id: number): void {
-    this.productService.delete(id).subscribe(() => this.loadProducts());
+  addProduct(): void {
+    this.router.navigate(['/products/new']);
   }
 
-  editProduct(product: Product): void {
-    this.productService.update(product).subscribe(() => this.editProduct(product));
+  editProduct(id: number): void {
+    this.router.navigate([`/products/edit/${id}`]);
+  }
+
+  deleteProduct(id: number): void {
+    if (confirm('Are you sure you want to delete this product?')) {
+      this.productService.delete(id).subscribe(() => {
+        this.products = this.products.filter(product => product.id !== id);
+      });
+    }
   }
 }

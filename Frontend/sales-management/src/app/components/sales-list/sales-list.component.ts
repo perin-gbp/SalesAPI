@@ -3,6 +3,7 @@ import { SaleService } from '../../services/sale.service';
 import { Sale } from '../../models/sale';
 import { CommonModule } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sales-list',
@@ -15,8 +16,9 @@ import { provideHttpClient } from '@angular/common/http';
 })
 export class SalesListComponent implements OnInit {
   sales: Sale[] = [];
+  searchText: string = '';
 
-  constructor(private saleService: SaleService) {}
+  constructor(private saleService: SaleService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadSales();
@@ -26,5 +28,21 @@ export class SalesListComponent implements OnInit {
     this.saleService.getAll().subscribe((data) => {
       this.sales = data;
     });
+  }
+
+  addSale(): void {
+    this.router.navigate(['/sales/new']);
+  }
+
+  editSale(id: number): void {
+    this.router.navigate([`/sales/edit/${id}`]);
+  }
+
+  deleteSale(id: number): void {
+    if (confirm('Are you sure you want to delete this sale?')) {
+      this.saleService.delete(id).subscribe(() => {
+        this.sales = this.sales.filter(sale => sale.id !== id);
+      });
+    }
   }
 }

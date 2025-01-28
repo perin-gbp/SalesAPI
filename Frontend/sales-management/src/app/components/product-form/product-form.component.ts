@@ -26,6 +26,7 @@ export class ProductFormComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.productForm = this.fb.group({
+      id: [0, Validators.required],
       name: ['', Validators.required],
       price: [0, [Validators.required, Validators.min(0.01)]]
     });
@@ -47,10 +48,12 @@ export class ProductFormComponent implements OnInit {
     });
   }
 
-  onSubmit(): void {
+  onSubmit(id: number): void {
     if (this.productForm.valid) {
       const productData = this.productForm.value;
+      productData.id = id;
       if (this.isEditMode && this.productId) {
+        console.log(productData)
         this.productService.update(productData).subscribe(() => {
           this.router.navigate(['/products']);
         });

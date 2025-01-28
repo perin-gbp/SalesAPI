@@ -1,25 +1,41 @@
 <div class="container mt-5">
-    <h2>Sales List</h2>
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>Sale Number</th>
-          <th>Customer</th>
-          <th>Total Amount</th>
-          <th>Date</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let sale of sales">
-          <td>{{ sale.saleNumber }}</td>
-          <td>{{ sale.customer }}</td>
-          <td>{{ sale.totalAmount }}</td>
-          <td>{{ sale.saleDate }}</td>
-          <td>
-            <button class="btn btn-info btn-sm">View</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <h2 class="text-center mb-4">Sales List</h2>
+
+  <div class="d-flex justify-content-between mb-3">
+    <button class="btn btn-success" (click)="addSale()">Add Sale</button>
   </div>
+
+  <table class="table table-striped table-bordered">
+    <thead class="table-dark">
+      <tr>
+        <th>Sale Number</th>
+        <th>Customer</th>
+        <th>Total Amount</th>
+        <th>Date</th>
+        <th>Items</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let sale of sales">
+        <td>{{ sale.saleNumber }}</td>
+        <td>{{ sale.customer }}</td>
+        <td>{{ sale.totalAmount | currency }}</td>
+        <td>{{ sale.saleDate | date }}</td>
+        <td>
+          <ul>
+            <li *ngFor="let item of sale.items">
+              {{ item.productName }} - {{ item.quantity }} x {{ item.unitPrice | currency }} = {{ item.totalPrice | currency }}
+            </li>
+          </ul>
+        </td>
+        <td>
+          <!-- Botão para editar a venda -->
+          <button class="btn btn-info btn-sm me-2" (click)="editSale(sale.id)">Edit</button>
+          <!-- Botão para deletar a venda -->
+          <button class="btn btn-danger btn-sm" (click)="deleteSale(sale.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

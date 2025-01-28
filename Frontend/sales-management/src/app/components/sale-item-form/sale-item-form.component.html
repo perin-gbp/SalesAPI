@@ -1,0 +1,29 @@
+<div class="row">
+    <!-- Dropdown de Produtos -->
+    <div class="col">
+      <label>Product</label>
+      <select class="form-select" formControlName="productId">
+        <option label="Select" disabled selected></option>
+        <option *ngFor="let product of products" [value]="product.id">
+          {{ product.name }}
+        </option>
+      </select>
+    </div>
+  
+    <!-- Quantidade -->
+    <div class="col">
+      <label>Quantity</label>
+      <input type="number" class="form-control" formControlName="quantity" min="1" max="20" />
+    </div>
+  
+    <!-- Preço Unitário -->
+    <div class="col">
+      <label>Unit Price</label>
+      <input type="number" class="form-control" formControlName="unitPrice" min="0.01" readonly />
+    </div>
+  
+    <!-- Botão de Remover -->
+    <div class="col align-self-end">
+      <button type="button" class="btn btn-danger" (click)="onRemove()">Remove</button>
+    </div>
+  </div>

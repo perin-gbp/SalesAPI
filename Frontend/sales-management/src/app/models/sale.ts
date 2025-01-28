@@ -5,16 +5,14 @@ export interface Sale {
     customer: string;
     totalAmount: number;
     branch: string;
-    isCancelled: boolean;
     items: SaleItem[];
   }
-  
+
   export interface SaleItem {
-    id: number;
-    productId: number;
+    id?: number;
+    productId: number,
     productName: string;
     quantity: number;
     unitPrice: number;
-    discount: number;
-    totalPrice: number;
+    totalPrice?: number;
   }
